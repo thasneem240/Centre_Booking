@@ -13,18 +13,17 @@ namespace Web_API.Controllers
          [Route("admLogin/{userName}/{password}")]
          [Route("admLogin")]
          [HttpGet]
-         public bool admLogin(String userName, String password) 
+         public IHttpActionResult admLogin(String userName, String password) 
          {
            
             if (userName.Equals("admin") && password.Equals("adminpass"))
             {
-                return true;
-                //return Ok();
+                return Ok(true);
             }
             else
             {
-                return false;
-                //return BadRequest();
+               
+               return BadRequest();
             }
 
         }

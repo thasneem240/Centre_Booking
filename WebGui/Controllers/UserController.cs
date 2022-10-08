@@ -38,6 +38,12 @@ namespace WebGui.Controllers
         [HttpPost]
         public IActionResult search([FromBody] SearchData searchString)
         {
+            if (String.IsNullOrEmpty(searchString.SearchStr))
+            {
+                return BadRequest("Empty Field!!, Please input the Search centre name");
+            }
+
+
             string URL = "http://localhost:2590/";
 
             RestClient restClient = new RestClient(URL);
@@ -59,9 +65,75 @@ namespace WebGui.Controllers
             }
             else
             {
-                return NotFound();
+                return NotFound("Not Found");
             }
         }
+
+
+
+        [HttpPost]
+        public IActionResult showNextAvailableDate([FromBody] SearchData searchString)
+        {
+            if (String.IsNullOrEmpty(searchString.SearchStr))
+            {
+                return BadRequest("Empty Field!!, Please input the Centre name");
+            }
+
+            string URL = "http://localhost:2590/";
+
+            RestClient restClient = new RestClient(URL);
+
+            //Build a request with the json in the body
+            RestRequest restRequest = new RestRequest("api/search", Method.Post);
+
+            //restRequest.AddJsonBody(JsonConvert.SerializeObject(searchString));
+
+            restRequest.AddJsonBody(searchString);
+
+            RestResponse restResponse = restClient.Execute(restRequest);
+
+            Centre centre = JsonConvert.DeserializeObject<Centre>(restResponse.Content);
+
+            if (centre != null)
+            {
+                String nextAvilDate = getNextAvailableDate(centre); 
+
+                return Ok(nextAvilDate);
+            }
+            else
+            {
+                return NotFound("Not Found");
+            }
+        }
+
+
+
+        /* Get the Next Date */
+        private String getNextAvailableDate(Centre centre) 
+        {
+            String nextDate = null;
+
+            if (centre.BookStatus == 0)
+            {
+                nextDate = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+            else 
+            {
+                Nullable < System.DateTime > dateTime = centre.EndDate;
+
+                DateTime dateTimeValue = dateTime.Value;
+                DateTime nextDateTime = dateTimeValue.AddDays(1);
+
+                nextDate = nextDateTime.ToString("yyyy-MM-dd");
+            }
+
+
+            return nextDate;
+
+        }
+
+
+
 
 
     }

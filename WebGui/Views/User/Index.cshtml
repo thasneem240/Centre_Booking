@@ -24,6 +24,8 @@
     <button id="showAllCenters" onclick="showAllCenters()">Show All Centers</button>
     <button id="search" onclick="search()">Search</button>
     <button id="clear" onclick="clearr()">Clear</button>
+    <input type="text" id="nextDate" name="nextDate" placeholder="Next Available Start Date" />
+    <button id="showNextAvailableStartDate" onclick="showNextAvailableStartDate()">Show Next Available Start Date</button>
 
     <div id="tblDynamic">
         <table>
@@ -69,30 +71,26 @@
     }
 
 
-    function search() {
+    function showNextAvailableStartDate()
+    {
         $.ajax({
             type: 'POST',
-            url: '/User/search/',
+            url: '/User/showNextAvailableDate/',
             contentType: 'application/json',
             data: JSON.stringify(
                 {
-                    "SearchStr": $('#searchText').val(),
+                    "SearchStr": $('#centreName').val()
                 }),
 
             success: function (data, textStatus, jQxhr) 
             {
-                alert("successfully found the Data");
-                var obj = JSON.parse(data);
-                $("#centreName").val(obj.CentreName);
-                $("#bookStatus").val(obj.BookStatus);
-                $("#startDate").val(obj.StartDate);
-                $("#endDate").val(obj.EndDate);
-                $("#bookedUserName").val(obj.BookedUserName);
+                alert("successfully found the Next Avilable Start Date");
+
+                $("#nextDate").val(data);
             },
             error: function (jqXhr, textStatus, errorThrown) 
             {
-                alert(errorThrown);
-                clearr();
+                alert(jqXhr.responseText);
                 console.log(xhr.statusText);
                 console.log(textStatus);
                 console.log(error);
@@ -107,6 +105,43 @@
 
        inputs.forEach(input => input.value = '');
     }
+
+
+
+    function search() 
+    {
+        $.ajax({
+            type: 'POST',
+            url: '/User/search/',
+            contentType: 'application/json',
+            data: JSON.stringify(
+                {
+                    "SearchStr": $('#searchText').val(),
+                }),
+
+            success: function (data, textStatus, jQxhr) {
+                alert("successfully found the Data");
+                var obj = JSON.parse(data);
+                $("#centreName").val(obj.CentreName);
+                $("#bookStatus").val(obj.BookStatus);
+                $("#startDate").val(obj.StartDate);
+                $("#endDate").val(obj.EndDate);
+                $("#bookedUserName").val(obj.BookedUserName);
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+                alert(jqXhr.responseText);
+                clearr();
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+        });
+    }
+
+
+
+
+
 
 
 </script>

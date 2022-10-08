@@ -13,10 +13,10 @@ namespace Web_API.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class BookingCentreDBEntities1 : DbContext
+    public partial class BookingCentreDBEntities2 : DbContext
     {
-        public BookingCentreDBEntities1()
-            : base("name=BookingCentreDBEntities1")
+        public BookingCentreDBEntities2()
+            : base("name=BookingCentreDBEntities2")
         {
         }
     

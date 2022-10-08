@@ -14,7 +14,7 @@ namespace Web_API.Controllers
 {
     public class BookingsController : ApiController
     {
-        private BookingCentreDBEntities1 db = new BookingCentreDBEntities1();
+        private BookingCentreDBEntities2 db = new BookingCentreDBEntities2();
 
         // GET: api/Bookings
         public IQueryable<Booking> GetBookings()
@@ -129,5 +129,7 @@ namespace Web_API.Controllers
         {
             return db.Bookings.Count(e => e.PersonName == id) > 0;
         }
+
+
     }
 }

@@ -111,25 +111,23 @@ namespace WebGui.Controllers
         /* Get the Next Date */
         private String getNextAvailableDate(Centre centre) 
         {
-            String nextDate = null;
 
-            if (centre.BookStatus == 0)
-            {
-                nextDate = DateTime.Now.ToString("yyyy-MM-dd");
-            }
-            else 
-            {
-                Nullable < System.DateTime > dateTime = centre.EndDate;
+            string URL = "http://localhost:2590/";
 
-                DateTime dateTimeValue = dateTime.Value;
-                DateTime nextDateTime = dateTimeValue.AddDays(1);
+            RestClient restClient = new RestClient(URL);
 
-                nextDate = nextDateTime.ToString("yyyy-MM-dd");
-            }
+            //Build a request with the json in the body
+            RestRequest restRequest = new RestRequest("api/NextAvailable", Method.Post);
 
+            //restRequest.AddJsonBody(JsonConvert.SerializeObject(searchString));
+
+            restRequest.AddJsonBody(centre);
+
+            RestResponse restResponse = restClient.Execute(restRequest);
+
+            String nextDate = restResponse.Content;
 
             return nextDate;
-
         }
 
 

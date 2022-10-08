@@ -10,8 +10,9 @@
             <PropertyRef Name="PersonName" />
           </Key>
           <Property Name="PersonName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StartDate" Type="date" />
-          <Property Name="EndDate" Type="date" />
+          <Property Name="CentreName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
         </EntityType>
         <EntityContainer Name="BookingCentreDBModel1StoreContainer">
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
@@ -26,10 +27,11 @@
             <PropertyRef Name="PersonName" />
           </Key>
           <Property Name="PersonName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
-          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="CentreName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
-        <EntityContainer Name="BookingCentreDBEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="BookingCentreDBEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Bookings" EntityType="Self.Booking" />
         </EntityContainer>
       </Schema>
@@ -37,11 +39,12 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="BookingCentreDBModel1StoreContainer" CdmEntityContainer="BookingCentreDBEntities1">
+        <EntityContainerMapping StorageEntityContainer="BookingCentreDBModel1StoreContainer" CdmEntityContainer="BookingCentreDBEntities2">
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="BookingCentreDBModel1.Booking">
               <MappingFragment StoreEntitySet="Booking">
                 <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="CentreName" ColumnName="CentreName" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
               </MappingFragment>

@@ -7,14 +7,8 @@
 
 <div id="studentForm">
     <form>
-        <p><strong> Booking Status = 0 => Booking is Available </strong></p>
-        <p><strong> Booking Status = 1 => Booking is Not Available </strong></p>
-
+       
         <input type="text" id="centreName" name="centreName" placeholder="Centre Name" />
-        <input type="text" id="bookStatus" name="bookStatus" placeholder="Booking Status" />        
-        <input type="text" id="startDate" name="startDate" placeholder="Start Date" />
-        <input type="text" id="endDate" name="endDate" placeholder="End Date" />
-        <input type="text" id="bookedUserName" name="bookedUserName" placeholder="Booked User Name" />
 
         <p><strong> Here Enter the Search centres names:</strong></p>
         <input type="text" id="searchText" name="searchText" placeholder="Search Text" />
@@ -49,11 +43,10 @@
                 alert("Successfully Loaded the Centres List");
                 var jsonObj = data;
 
-                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked User Name</th></tr>';
+                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>   Centre Name    </th></tr>';
                 $(jsonObj).each(function () {
                     var row = $(this)[0];
-                    strHTML += '<tr><td>' + row["centreName"] + '</td><td>' + row["bookStatus"] + '</td><td>'
-                        + row["startDate"] + '</td><td>' + row["endDate"] + '</td><td>' + row["bookedUserName"] + '</td></tr>';
+                    strHTML += '<tr><td>' + row["centreName"] + '</td></tr>';
                 });
 
                 $('#tblDynamic').html(strHTML);
@@ -79,7 +72,7 @@
             contentType: 'application/json',
             data: JSON.stringify(
                 {
-                    "SearchStr": $('#centreName').val()
+                    "CentreName": $('#centreName').val()
                 }),
 
             success: function (data, textStatus, jQxhr) 
@@ -91,6 +84,7 @@
             error: function (jqXhr, textStatus, errorThrown) 
             {
                 alert(jqXhr.responseText);
+                 $("#nextDate").val('');
                 console.log(xhr.statusText);
                 console.log(textStatus);
                 console.log(error);

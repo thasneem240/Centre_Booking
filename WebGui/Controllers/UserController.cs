@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Net;
 using WebGui.Models;
 
 namespace WebGui.Controllers
@@ -72,45 +73,12 @@ namespace WebGui.Controllers
 
 
         [HttpPost]
-        public IActionResult showNextAvailableDate([FromBody] SearchData searchString)
+        public IActionResult showNextAvailableDate([FromBody] Centre centreObj)
         {
-            if (String.IsNullOrEmpty(searchString.SearchStr))
+            if (String.IsNullOrEmpty(centreObj.CentreName))
             {
                 return BadRequest("Empty Field!!, Please input the Centre name");
             }
-
-            string URL = "http://localhost:2590/";
-
-            RestClient restClient = new RestClient(URL);
-
-            //Build a request with the json in the body
-            RestRequest restRequest = new RestRequest("api/search", Method.Post);
-
-            //restRequest.AddJsonBody(JsonConvert.SerializeObject(searchString));
-
-            restRequest.AddJsonBody(searchString);
-
-            RestResponse restResponse = restClient.Execute(restRequest);
-
-            Centre centre = JsonConvert.DeserializeObject<Centre>(restResponse.Content);
-
-            if (centre != null)
-            {
-                String nextAvilDate = getNextAvailableDate(centre); 
-
-                return Ok(nextAvilDate);
-            }
-            else
-            {
-                return NotFound("Not Found");
-            }
-        }
-
-
-
-        /* Get the Next Date */
-        private String getNextAvailableDate(Centre centre) 
-        {
 
             string URL = "http://localhost:2590/";
 
@@ -121,18 +89,22 @@ namespace WebGui.Controllers
 
             //restRequest.AddJsonBody(JsonConvert.SerializeObject(searchString));
 
-            restRequest.AddJsonBody(centre);
+            restRequest.AddJsonBody(centreObj);
 
             RestResponse restResponse = restClient.Execute(restRequest);
 
-            String nextDate = restResponse.Content;
+            
+            if (restResponse.StatusCode == HttpStatusCode.OK)
+            {
+                String nextDate = restResponse.Content;
 
-            return nextDate;
+                return Ok(nextDate);
+            }
+            else
+            {
+                return NotFound("Centre Not Found");
+            }
         }
-
-
-
-
 
     }
 }

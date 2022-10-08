@@ -15,13 +15,20 @@ namespace Web_API.Controllers
     {
 
         private BookingCentreDBEntities2 db = new BookingCentreDBEntities2();
+        private BookingCentreDBEntities db2 = new BookingCentreDBEntities();
 
         // POST api/NextAvailable
-        public String Post([FromBody]Centre centre)
+        public IHttpActionResult Post([FromBody]Centre centreObj)
         {
             String nextDate = null;
 
-            String centreName = centre.CentreName;
+            String centreName = centreObj.CentreName;
+
+            Centre centre = db2.Centres.Find(centreName);
+            if (centre == null)
+            {
+                return NotFound();
+            }
 
 
             IQueryable<Booking> bookQuery = db.Bookings;
@@ -63,7 +70,7 @@ namespace Web_API.Controllers
             }
 
 
-            return nextDate;
+            return Ok(nextDate);
 
         }
 

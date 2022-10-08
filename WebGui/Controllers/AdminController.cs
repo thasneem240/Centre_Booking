@@ -155,5 +155,50 @@ namespace WebGui.Controllers
             }
         }
 
+
+
+
+        [HttpPost]
+        public IActionResult showAllBookings([FromBody] Centre centre)
+        {
+            if (status.Equals("Logged In"))
+            {
+
+                if (String.IsNullOrEmpty(centre.CentreName))
+                {
+                    return BadRequest("Empty Field, Please input the Centre Name");
+                }
+
+                string URL = "http://localhost:2590/";
+                RestClient restClient = new RestClient(URL);
+
+                RestRequest restRequest = new RestRequest("api/ShowBooking", Method.Post);
+
+                restRequest.AddJsonBody(centre);
+
+                RestResponse restResponse = restClient.Execute(restRequest);
+
+
+                if (restResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    List<Booking> bookingList = JsonConvert.DeserializeObject<List<Booking>>(restResponse.Content);
+
+                    return Ok(bookingList);
+                }
+                else 
+                {
+                    return BadRequest("Centre Not Found");
+                }
+
+            }
+            else
+            {
+                return BadRequest("Access denied!! Please Login");
+            }
+        }
+
+
     }
+
+
 }

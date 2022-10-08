@@ -27,6 +27,7 @@
     <button id="status" onclick="getStatus()">GetStatus</button>
     <button id="showAllCenters" onclick="showAllCenters()">Show All Centers</button>
     <button id="addNewCentre" onclick="addNewCentree()">Add New Centre</button>
+    <button id="showBookings" onclick="showBookings()">Show Bookings</button>
 
     <div id="tblDynamic">
         <table>
@@ -102,11 +103,10 @@
                alert("Successfully Loaded the Centres List");
                var jsonObj = data;
 
-                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked User Name</th></tr>';
+                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>   Centre Name    </th></tr>';
                 $(jsonObj).each(function () {
                     var row = $(this)[0];
-                    strHTML += '<tr><td>' + row["centreName"] + '</td><td>' + row["bookStatus"] + '</td><td>'
-                        + row["startDate"] + '</td><td>' + row["endDate"] + '</td><td>' + row["bookedUserName"] + '</td></tr>';
+                    strHTML += '<tr><td>' + row["centreName"] + '</td></tr>';
                 });
 
                 $('#tblDynamic').html(strHTML);
@@ -147,6 +147,48 @@
                 console.log(error);
             }
         });
+    }
+
+
+
+    function showBookings() 
+    {
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/showAllBookings/',
+            contentType: 'application/json',
+            dataType: "json",
+            data: JSON.stringify(
+                {
+                    "CentreName": $('#centName').val()
+                }),
+            processData: false,
+            success: function (data, textStatus, jQxhr) 
+            {
+                alert("Successfully Loaded the Booking List For this specefic Centre");
+                var jsonObj = data;
+
+                var strHTML = ' <caption><b>Booking List For this Centre</b></caption><tr><th>Booking Person Name</th><th>Start Date</th><th>End Date</th><th>Centre Name</th></tr>';
+                $(jsonObj).each(function () {
+                    var row = $(this)[0];
+                    strHTML += '<tr><td>' + row["personName"] + '</td><td>' + row["startDate"] + '</td><td>'
+                        + row["endDate"] + '</td><td>' + row["centreName"] + '</td></tr>';
+                });
+
+                $('#tblDynamic').html(strHTML);
+            },
+            error: function (xhr, textStatus, error) 
+            {
+                alert(xhr.responseText);
+                $('#tblDynamic').html('');
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+
+
+        });
+
     }
 
 

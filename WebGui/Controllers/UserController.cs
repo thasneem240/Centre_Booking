@@ -34,5 +34,35 @@ namespace WebGui.Controllers
 
         }
 
+
+        [HttpPost]
+        public IActionResult search([FromBody] SearchData searchString)
+        {
+            string URL = "http://localhost:2590/";
+
+            RestClient restClient = new RestClient(URL);
+
+            //Build a request with the json in the body
+            RestRequest restRequest = new RestRequest("api/search", Method.Post);
+
+            //restRequest.AddJsonBody(JsonConvert.SerializeObject(searchString));
+
+            restRequest.AddJsonBody(searchString);
+
+            RestResponse restResponse = restClient.Execute(restRequest);
+
+            Centre centre = JsonConvert.DeserializeObject<Centre>(restResponse.Content);
+
+            if (centre != null)
+            {
+                return Ok(restResponse.Content);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
     }
 }

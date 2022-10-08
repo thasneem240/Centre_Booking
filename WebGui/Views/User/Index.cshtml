@@ -7,10 +7,23 @@
 
 <div id="studentForm">
     <form>
+        <p><strong> Booking Status = 0 => Booking is Available </strong></p>
+        <p><strong> Booking Status = 1 => Booking is Not Available </strong></p>
+
+        <input type="text" id="centreName" name="centreName" placeholder="Centre Name" />
+        <input type="text" id="bookStatus" name="bookStatus" placeholder="Booking Status" />        
+        <input type="text" id="startDate" name="startDate" placeholder="Start Date" />
+        <input type="text" id="endDate" name="endDate" placeholder="End Date" />
+        <input type="text" id="bookedUserName" name="bookedUserName" placeholder="Booked User Name" />
+
+        <p><strong> Here Enter the Search centres names:</strong></p>
+        <input type="text" id="searchText" name="searchText" placeholder="Search Text" />
 
     </form>
 
     <button id="showAllCenters" onclick="showAllCenters()">Show All Centers</button>
+    <button id="search" onclick="search()">Search</button>
+    <button id="clear" onclick="clearr()">Clear</button>
 
     <div id="tblDynamic">
         <table>
@@ -34,7 +47,7 @@
                 alert("Successfully Loaded the Centres List");
                 var jsonObj = data;
 
-                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked user Name</th></tr>';
+                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked User Name</th></tr>';
                 $(jsonObj).each(function () {
                     var row = $(this)[0];
                     strHTML += '<tr><td>' + row["centreName"] + '</td><td>' + row["bookStatus"] + '</td><td>'
@@ -55,6 +68,45 @@
 
     }
 
+
+    function search() {
+        $.ajax({
+            type: 'POST',
+            url: '/User/search/',
+            contentType: 'application/json',
+            data: JSON.stringify(
+                {
+                    "SearchStr": $('#searchText').val(),
+                }),
+
+            success: function (data, textStatus, jQxhr) 
+            {
+                alert("successfully found the Data");
+                var obj = JSON.parse(data);
+                $("#centreName").val(obj.CentreName);
+                $("#bookStatus").val(obj.BookStatus);
+                $("#startDate").val(obj.StartDate);
+                $("#endDate").val(obj.EndDate);
+                $("#bookedUserName").val(obj.BookedUserName);
+            },
+            error: function (jqXhr, textStatus, errorThrown) 
+            {
+                alert(errorThrown);
+                clearr();
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+        });
+    }
+
+
+    function clearr() 
+    {
+       let inputs = document.querySelectorAll('input');
+
+       inputs.forEach(input => input.value = '');
+    }
 
 
 </script>

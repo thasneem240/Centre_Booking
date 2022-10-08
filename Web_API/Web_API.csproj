@@ -198,6 +198,7 @@
     <Compile Include="Controllers\CentresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,6 +239,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Centre.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

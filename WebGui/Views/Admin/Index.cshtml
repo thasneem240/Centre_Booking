@@ -9,7 +9,7 @@
     <form>
         
         <input type="text" id="userName" name="userName" placeholder="User Name" />
-        <input type="text" id="password" name="password" placeholder="Password" />
+        <input type="password" id="password" name="password" placeholder="Password" />
     </form>
     <button id="search" onclick="login()">Login</button>
   
@@ -102,7 +102,7 @@
                alert("Successfully Loaded the Centres List");
                var jsonObj = data;
 
-                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked user Name</th></tr>';
+                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked User Name</th></tr>';
                 $(jsonObj).each(function () {
                     var row = $(this)[0];
                     strHTML += '<tr><td>' + row["centreName"] + '</td><td>' + row["bookStatus"] + '</td><td>'

@@ -21,10 +21,12 @@
         
 
         <input type="text" id="loginStatus" name="loginStatus" placeholder="Login Status" />
+        <input type="text" id="centName" name="centName" placeholder="Center Name" />
     </form>
   
     <button id="status" onclick="getStatus()">GetStatus</button>
     <button id="showAllCenters" onclick="showAllCenters()">Show All Centers</button>
+    <button id="addNewCentre" onclick="addNewCentree()">Add New Centre</button>
 
     <div id="tblDynamic">
         <table>
@@ -121,5 +123,33 @@
         });
 
     }
+
+
+    function addNewCentree()
+    {
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/addNewCentre/',
+            contentType: 'application/json',
+            data: JSON.stringify(
+                {
+                    "Name": $('#centName').val()
+                }),
+            success: function (data, textStatus, jQxhr) 
+            {
+                alert("Data Successfully Inserted");
+            },
+            error: function (xhr, textStatus, error) 
+            {
+                alert(xhr.responseText);
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+        });
+    }
+
+
+
 
 </script>

@@ -4,6 +4,10 @@
 @{
 }
 
+<div id="tblDynamic">
+    <table>
+    </table>
+</div>
 
 <div id="studentForm">
     <form>
@@ -21,12 +25,20 @@
     <input type="text" id="nextDate" name="nextDate" placeholder="Next Available Start Date" />
     <button id="showNextAvailableStartDate" onclick="showNextAvailableStartDate()">Show Next Available Start Date</button>
 
-    <div id="tblDynamic">
-        <table>
-        </table>
-    </div>
+    <p><strong> /**********************************/</strong></p>
+    <p><strong> Here Enter the Booking Details:</strong></p>
+    <p><strong> /**********************************/</strong></p>
+
+    <input type="text" id="personName" name="personName" placeholder="Booking Person Name" />
+    <input type="text" id="bookCentreName" name="bookCentreName" placeholder="Booking Centre Name" />
+    <input type="text" id="stDate" name="stDate" placeholder="Start Date" />
+    <input type="text" id="enDate" name="enDate" placeholder="End Date" />
+    <p><strong> /**********************************/</strong></p>
+
+    <button id="addBooking" onclick="addBooking()">Add Booking</button>
 
 </div>
+
 
 
 <script>
@@ -98,6 +110,7 @@
        let inputs = document.querySelectorAll('input');
 
        inputs.forEach(input => input.value = '');
+       $('#tblDynamic').html('');
     }
 
 
@@ -132,6 +145,34 @@
         });
     }
 
+
+
+    function addBooking() 
+    {
+        $.ajax({
+            type: 'POST',
+            url: '/User/addBooking/',
+            contentType: 'application/json',
+            data: JSON.stringify(
+                {
+                    "PersonName": $('#personName').val(),
+                    "CentreName": $("#bookCentreName").val(),
+                    "StartDate": $("#stDate").val(),
+                    "EndDate": $("#enDate").val()
+                }),
+            success: function (data, textStatus, jQxhr) 
+            {
+                alert("Successfully Booked");
+            },
+            error: function (xhr, textStatus, error) 
+            {
+                alert(xhr.responseText);
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+        });
+    }
 
 
 

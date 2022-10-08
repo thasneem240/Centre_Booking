@@ -106,5 +106,106 @@ namespace WebGui.Controllers
             }
         }
 
+
+
+
+        [HttpPost]
+        public IActionResult addBooking([FromBody] BookingStr bookingStrObj)
+        {
+
+            String personName = bookingStrObj.PersonName;
+            String centreName = bookingStrObj.CentreName;
+            String startDate = bookingStrObj.StartDate;
+            String endDate = bookingStrObj.EndDate;
+
+            /* Check Empty */
+
+            if (String.IsNullOrEmpty(personName) || String.IsNullOrEmpty(centreName) 
+                || String.IsNullOrEmpty(startDate) || String.IsNullOrEmpty(endDate))
+            {
+                return BadRequest(" Contains Empty Field!! Please input all the relevant fields");
+            }
+
+            /* Validate the Dates */
+
+            if (!IsValidDate(startDate)) 
+            {
+                return BadRequest(" Invalid Start Date!! Date Format Error");
+            }
+
+
+            if (!IsValidDate(endDate))
+            {
+                return BadRequest(" Invalid End Date!! Date Format Error");
+            }
+
+            String currDateTime = DateTime.Now.ToString("yyyy-MM-dd");
+
+            DateTime stDate = DateTime.Parse(startDate);
+            DateTime enDate = DateTime.Parse(endDate);
+            DateTime currDate = DateTime.Parse(currDateTime);
+            
+
+
+            /* Check the Start date */
+            if (stDate < currDate) 
+            {
+                return BadRequest(" Error!! start date should be greater and equal to the current date");
+            }
+
+            /* Check the Start date and end date */
+
+            if (stDate >= enDate)
+            {
+                return BadRequest(" Error!! End date Should be Greater than Start date");
+            }
+
+
+            string URL = "http://localhost:2590/";
+            RestClient restClient = new RestClient(URL);
+
+            RestRequest restRequest = new RestRequest("api/AddBooking", Method.Post);
+            
+            /* Create a Booking Object */
+            Booking booking = new Booking();
+
+            booking.PersonName = personName;
+            booking.CentreName = centreName;
+            booking.StartDate = stDate;
+            booking.EndDate = enDate;
+
+            restRequest.AddJsonBody(booking);
+
+            RestResponse restResponse = restClient.Execute(restRequest);
+
+            if (restResponse.StatusCode == HttpStatusCode.NotFound) 
+            {
+                return NotFound("Centre Not Found");
+            }
+
+            if (restResponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                return BadRequest(" Error!! Dates are Overlapping. please put the start date from next avilable date");
+            }
+
+            if (restResponse.StatusCode == HttpStatusCode.Conflict) 
+            {
+                return Conflict("Person Name already exist please enter different person name");
+            }
+
+           
+            return Ok();
+
+        }
+
+
+        private static bool IsValidDate(string date) 
+        {
+            DateTime tempDateTimeObj;
+
+            return DateTime.TryParse(date, out tempDateTimeObj);
+        }
+
+
     }
 }

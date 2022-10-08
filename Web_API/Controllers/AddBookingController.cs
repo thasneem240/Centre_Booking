@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,18 +9,20 @@ using Web_API.Models;
 
 namespace Web_API.Controllers
 {
-    public class NextAvailableController : ApiController
+    public class AddBookingController : ApiController
     {
 
         private BookingCentreDBEntities2 db = new BookingCentreDBEntities2();
         private BookingCentreDBEntities db2 = new BookingCentreDBEntities();
 
-        // POST api/NextAvailable
-        public IHttpActionResult Post([FromBody]Centre centreObj)
+
+
+        // POST api/AddBooking
+        public IHttpActionResult Post([FromBody] Booking bookingObj)
         {
             String nextDate = null;
 
-            String centreName = centreObj.CentreName;
+            String centreName = bookingObj.CentreName;
 
             Centre centre = db2.Centres.Find(centreName);
             if (centre == null)
@@ -33,14 +33,54 @@ namespace Web_API.Controllers
 
             nextDate = getNextDate(centreName);
 
+            /* Get the Next Availble dateTime Object*/
+            DateTime nextDateTime = DateTime.Parse(nextDate);
 
-            return Ok(nextDate);
 
+            /* Check the Over lapping time */
+            if (nextDateTime > bookingObj.StartDate) 
+            {
+                return BadRequest();
+            }
+
+
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.Bookings.Add(bookingObj);
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                if (BookingExists(bookingObj.PersonName))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = bookingObj.PersonName }, bookingObj);
+
+
+        }
+
+        private bool BookingExists(string id)
+        {
+            return db.Bookings.Count(e => e.PersonName == id) > 0;
         }
 
 
 
-        private string getNextDate(String centreName) 
+        private string getNextDate(String centreName)
         {
             string nextDate = null;
 
@@ -84,6 +124,9 @@ namespace Web_API.Controllers
 
             return nextDate;
         }
+
+
+
 
     }
 }

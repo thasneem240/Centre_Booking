@@ -26,7 +26,15 @@
     <button id="status" onclick="getStatus()">GetStatus</button>
     <button id="showAllCenters" onclick="showAllCenters()">Show All Centers</button>
 
+    <div id="tblDynamic">
+        <table>
+           
+        </table>
+    </div>
+
 </div>
+
+
 
 <script>
 
@@ -78,5 +86,40 @@
         });
     }
 
+
+    function showAllCenters()
+        {
+        $.ajax({
+            type: 'GET',
+            url: '/Admin/showAllCentres/',
+            contentType: 'application/json',
+            dataType: "json",
+            processData: false,
+            success: function (data, textStatus, jQxhr) 
+            {
+               alert("Successfully Loaded the Centres List");
+               var jsonObj = data;
+
+                var strHTML = ' <caption><b>Community Centres List</b></caption><tr><th>Centre Name</th><th>Booking Status</th><th>Start Date</th><th>End Date</th><th>Booked user Name</th></tr>';
+                $(jsonObj).each(function () {
+                    var row = $(this)[0];
+                    strHTML += '<tr><td>' + row["centreName"] + '</td><td>' + row["bookStatus"] + '</td><td>'
+                        + row["startDate"] + '</td><td>' + row["endDate"] + '</td><td>' + row["bookedUserName"] + '</td></tr>';
+                });
+
+                $('#tblDynamic').html(strHTML);
+            },
+            error: function (xhr, textStatus, error) 
+            {
+                alert("Error");
+                console.log(xhr.statusText);
+                console.log(textStatus);
+                console.log(error);
+            }
+
+          
+        });
+
+    }
 
 </script>

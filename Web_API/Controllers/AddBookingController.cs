@@ -16,6 +16,7 @@ namespace Web_API.Controllers
         private BookingCentreDBEntities db2 = new BookingCentreDBEntities();
 
 
+        /* Allowing users to book a centre from a start date to an end date */
 
         // POST api/AddBooking
         public IHttpActionResult Post([FromBody] Booking bookingObj)
@@ -43,7 +44,7 @@ namespace Web_API.Controllers
                 return BadRequest();
             }
 
-
+            /* Add the booking to database */
 
             if (!ModelState.IsValid)
             {
@@ -73,13 +74,14 @@ namespace Web_API.Controllers
 
         }
 
+        /* Check whether Booking is already exists */
         private bool BookingExists(string id)
         {
             return db.Bookings.Count(e => e.PersonName == id) > 0;
         }
 
 
-
+        /* Get the next Available Date */
         private string getNextDate(String centreName)
         {
             string nextDate = null;

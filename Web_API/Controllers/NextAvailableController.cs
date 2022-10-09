@@ -8,9 +8,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Web_API.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Web_API.Controllers
 {
+    /* providing users with the next available start date for a given centre */
+
     public class NextAvailableController : ApiController
     {
 

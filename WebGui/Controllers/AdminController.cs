@@ -24,6 +24,8 @@ namespace WebGui.Controllers
         }
 
 
+        /* Log in for admin */
+
         [HttpPost]
         public IActionResult Login([FromBody] Account account)
         {
@@ -82,6 +84,8 @@ namespace WebGui.Controllers
         }
 
 
+        /* View for admin to show all centres */
+
         [HttpGet]
         public IActionResult showAllCentres() 
         {
@@ -104,6 +108,8 @@ namespace WebGui.Controllers
 
         }
 
+
+        /* View for admin to add a new centre */
 
         [HttpPost]
         public IActionResult addNewCentre([FromBody]CentreName newCentreName) 
@@ -156,7 +162,7 @@ namespace WebGui.Controllers
         }
 
 
-
+        /* View for admin to select a centre and show all bookings */
 
         [HttpPost]
         public IActionResult showAllBookings([FromBody] Centre centre)

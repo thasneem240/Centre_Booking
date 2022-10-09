@@ -16,6 +16,8 @@ namespace Web_API.Controllers
     {
         private BookingCentreDBEntities db = new BookingCentreDBEntities();
 
+       /* Allowing all users(including the admin) to retrieve the list of centres */
+
         // GET: api/Centres
         public IQueryable<Centre> GetCentres()
         {
@@ -69,6 +71,8 @@ namespace Web_API.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+
+        /* Allowing admin to add new centre names to its centre lists. */
 
         // POST: api/Centres
         [ResponseType(typeof(Centre))]

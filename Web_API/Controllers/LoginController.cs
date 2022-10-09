@@ -7,6 +7,8 @@ using System.Web.Http;
 
 namespace Web_API.Controllers
 {
+    /* Allowing Admin to login */
+
      [RoutePrefix("api/login")]
      public class LoginController : ApiController
      {

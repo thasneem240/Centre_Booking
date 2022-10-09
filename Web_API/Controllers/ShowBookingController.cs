@@ -8,6 +8,9 @@ using Web_API.Models;
 
 namespace Web_API.Controllers
 {
+    /* Allowing admin to view all the bookings (booking person name, start date and end date) 
+            for a given center.*/
+
     public class ShowBookingController : ApiController
     {
         private BookingCentreDBEntities2 db = new BookingCentreDBEntities2();

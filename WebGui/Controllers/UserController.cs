@@ -13,6 +13,8 @@ namespace WebGui.Controllers
             return View();
         }
 
+        /* View for non-admin users to show all centres */
+
         [HttpGet]
         public IActionResult showAllCentres()
         {
@@ -35,6 +37,8 @@ namespace WebGui.Controllers
 
         }
 
+        /* View for non-admin users to search centres names
+              (partial string match should produce a result) */
 
         [HttpPost]
         public IActionResult search([FromBody] SearchData searchString)
@@ -71,6 +75,7 @@ namespace WebGui.Controllers
         }
 
 
+        /* View for non-admin to select a centre and show the next available start date */
 
         [HttpPost]
         public IActionResult showNextAvailableDate([FromBody] Centre centreObj)
@@ -108,6 +113,8 @@ namespace WebGui.Controllers
 
 
 
+        /* View for non-admin to select a centre and book it 
+            from a start date to an end date (if available). */
 
         [HttpPost]
         public IActionResult addBooking([FromBody] BookingStr bookingStrObj)
@@ -148,6 +155,7 @@ namespace WebGui.Controllers
 
 
             /* Check the Start date */
+
             if (stDate < currDate) 
             {
                 return BadRequest(" Error!! start date should be greater and equal to the current date");
@@ -199,6 +207,7 @@ namespace WebGui.Controllers
         }
 
 
+        /* To check the Date */
         private static bool IsValidDate(string date) 
         {
             DateTime tempDateTimeObj;
